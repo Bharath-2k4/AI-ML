@@ -1,0 +1,25 @@
+===== PORTRAIT VIEW – CHEAT MODEL =====
+Accuracy: 99.00%
+              precision    recall  f1-score   support
+
+           0       0.99      1.00      0.99      1780
+           1       0.99      0.92      0.95       220
+
+    accuracy                           0.99      2000
+   macro avg       0.99      0.96      0.97      2000
+weighted avg       0.99      0.99      0.99      2000
+
+
+===== PORTRAIT VIEW – CHURN MODEL =====
+Accuracy: 99.00%
+              precision    recall  f1-score   support
+
+           0       0.99      1.00      0.99      1750
+           1       0.99      0.93      0.96       250
+
+    accuracy                           0.99      2000
+   macro avg       0.99      0.97      0.98      2000
+weighted avg       0.99      0.99      0.99      2000
+
+
+✅ Portrait View training completed successfully

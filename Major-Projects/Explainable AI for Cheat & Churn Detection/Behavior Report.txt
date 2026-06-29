@@ -1,0 +1,11 @@
+===== BEHAVIOUR VIEW – CHURN MODEL =====
+              precision    recall  f1-score   support
+
+           0       0.93      0.92      0.93      5319
+           1       0.93      0.94      0.94      6102
+
+    accuracy                           0.93     11421
+   macro avg       0.93      0.93      0.93     11421
+weighted avg       0.93      0.93      0.93     11421
+
+Accuracy: 93.43%

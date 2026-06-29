@@ -1,0 +1,162 @@
+{% extends "base.html" %}
+
+{% block title %}Home - Game Cheat Detection System{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section bg-primary text-white py-5">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6">
+                <h1 class="display-4 fw-bold mb-4">Advanced Game Cheating & Churn Detection</h1>
+                <p class="lead mb-4">Leveraging machine learning and computer vision to detect cheating behavior and predict player churn in online gaming environments.</p>
+                {% if not session.user_id %}
+                <div class="d-flex gap-3">
+                    <a href="{{ url_for('register') }}" class="btn btn-light btn-lg">Get Started</a>
+                    <a href="{{ url_for('login') }}" class="btn btn-outline-light btn-lg">Login</a>
+                </div>
+                {% else %}
+                <a href="{{ url_for('dashboard') }}" class="btn btn-light btn-lg">Go to Dashboard</a>
+                {% endif %}
+            </div>
+            <div class="col-lg-6">
+                <div class="hero-image">
+                    <img src="https://media.tenor.com/1cSK6Tz0d68AAAAM/sorry.gif" alt="Game Analytics" class="img-fluid rounded-3">
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section class="features-section py-5">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="section-title">Advanced Detection Features</h2>
+            <p class="section-subtitle">Comprehensive cheating and churn detection using multiple approaches</p>
+        </div>
+        
+        <div class="row g-4">
+            <div class="col-md-6 col-lg-3">
+                <div class="feature-card text-center p-4 h-100">
+                    <div class="feature-icon mb-3">
+                        <i class="fas fa-chart-line fa-3x text-primary"></i>
+                    </div>
+                    <h4>Feature-Based Analysis</h4>
+                    <p>Analyze player behavior patterns using statistical features and machine learning models.</p>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <div class="feature-card text-center p-4 h-100">
+                    <div class="feature-icon mb-3">
+                        <i class="fas fa-file-alt fa-3x text-success"></i>
+                    </div>
+                    <h4>Log Analysis</h4>
+                    <p>Process game logs and session data to identify suspicious activities and patterns.</p>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <div class="feature-card text-center p-4 h-100">
+                    <div class="feature-icon mb-3">
+                        <i class="fas fa-users fa-3x text-warning"></i>
+                    </div>
+                    <h4>Behavior Analysis</h4>
+                    <p>Predict player retention and identify at-risk players before they leave the game.</p>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <div class="feature-card text-center p-4 h-100">
+                    <div class="feature-icon mb-3">
+                        <i class="fas fa-image fa-3x text-info"></i>
+                    </div>
+                    <h4>Image-Based Detection</h4>
+                    <p>Use computer vision to analyze gameplay screenshots for cheating indicators.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Slideshow Section -->
+<section class="slideshow-section bg-light py-5">
+    <div class="container">
+        <h2 class="text-center mb-5">System Overview</h2>
+        <div id="systemCarousel" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-indicators">
+                <button type="button" data-bs-target="#systemCarousel" data-bs-slide-to="0" class="active"></button>
+                <button type="button" data-bs-target="#systemCarousel" data-bs-slide-to="1"></button>
+                <button type="button" data-bs-target="#systemCarousel" data-bs-slide-to="2"></button>
+                <button type="button" data-bs-target="#systemCarousel" data-bs-slide-to="3"></button>
+            </div>
+            <div class="carousel-inner rounded-3">
+                <div class="carousel-item active">
+                    <img src="https://media.tenor.com/P8Swu4JxgOwAAAAM/csgo-hvh.gif" class="d-block w-100" alt="Data Collection">
+                    <div class="carousel-caption d-none d-md-block">
+                        <h5>Data Collection & Processing</h5>
+                        <p>Collecting comprehensive gameplay data for analysis</p>
+                    </div>
+                </div>
+                <div class="carousel-item">
+                    <img src="https://steamuserimages-a.akamaihd.net/ugc/1626319434624893703/22CE5CBC50A7877E2DBF3D7ECB7F022AC831B738/" class="d-block w-100" alt="Machine Learning">
+                    <div class="carousel-caption d-none d-md-block">
+                        <h5>Machine Learning Analysis</h5>
+                        <p>Advanced algorithms detecting patterns and anomalies</p>
+                    </div>
+                </div>
+                <div class="carousel-item">
+                    <img src="https://img.i-scmp.com/cdn-cgi/image/fit=contain,width=1024,format=auto/sites/default/files/2018/09/13/image_from_ios.gif" class="d-block w-100" alt="Real-time Detection">
+                    <div class="carousel-caption d-none d-md-block">
+                        <h5>Real-time Detection</h5>
+                        <p>Immediate identification of cheating behavior</p>
+                    </div>
+                </div>
+                <div class="carousel-item">
+                    <img src="https://i.makeagif.com/media/8-02-2021/QF5MlH.gif" class="d-block w-100" alt="Reporting">
+                    <div class="carousel-caption d-none d-md-block">
+                        <h5>Comprehensive Reporting</h5>
+                        <p>Detailed insights and prediction reasons</p>
+                    </div>
+                </div>
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#systemCarousel" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon"></span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#systemCarousel" data-bs-slide="next">
+                <span class="carousel-control-next-icon"></span>
+            </button>
+        </div>
+    </div>
+</section>
+
+<!-- Statistics Section -->
+<section class="stats-section py-5">
+    <div class="container">
+        <div class="row text-center">
+            <div class="col-md-3">
+                <div class="stat-item">
+                    <h3 class="display-4 text-primary fw-bold">95%</h3>
+                    <p class="text-dark">Detection Accuracy </p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stat-item">
+                    <h3 class="display-4 text-success fw-bold">10K+</h3>
+                    <p class="text-dark text-dark">Players Analyzed</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stat-item">
+                    <h3 class="display-4 text-warning fw-bold">24/7</h3>
+                    <p class="text-dark">Real-time Monitoring</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stat-item">
+                    <h3 class="display-4 text-info fw-bold">4</h3>
+                    <p class="text-dark">Detection Methods</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

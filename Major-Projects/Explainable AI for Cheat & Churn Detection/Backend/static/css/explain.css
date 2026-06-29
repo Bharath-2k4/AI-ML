@@ -1,0 +1,176 @@
+#explain-section {
+    margin-top: 40px;
+    padding: 25px;
+    background: #0f172a;
+    border-top: 2px solid #1e293b;
+    color: #e5e7eb;
+}
+
+.explain-title {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.explain-card {
+    display: flex;
+    gap: 30px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.explain-text {
+    max-width: 400px;
+}
+
+.explain-desc {
+    color: #94a3b8;
+}
+
+.explain-image img {
+    max-width: 380px;
+    border-radius: 10px;
+    border: 2px solid #334155;
+}
+/* =========================
+   RESULT CARD
+========================= */
+.result-card {
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+}
+
+/* =========================
+   STATUS BADGE
+========================= */
+.status-badge {
+    text-align: center;
+    padding: 12px;
+    font-size: 20px;
+    font-weight: bold;
+    border-radius: 50px;
+    margin-bottom: 20px;
+}
+
+.status-badge.success {
+    background: #eafaf1;
+    color: #1e8449;
+}
+
+.status-badge.danger {
+    background: #fdecea;
+    color: #b03a2e;
+    animation: pulseRed 1.8s infinite;
+}
+
+@keyframes pulseRed {
+    0%   { box-shadow: 0 0 0 0 rgba(244,67,54,0.4); }
+    70%  { box-shadow: 0 0 0 10px rgba(244,67,54,0); }
+    100% { box-shadow: 0 0 0 0 rgba(244,67,54,0); }
+}
+
+/* =========================
+   METRICS
+========================= */
+.metrics {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 15px;
+}
+
+.metric .label {
+    font-size: 14px;
+    color: #777;
+}
+
+.metric .value {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+/* =========================
+   CONFIDENCE BAR
+========================= */
+.confidence-bar {
+    width: 100%;
+    height: 10px;
+    background: #e9ecef;
+    border-radius: 20px;
+    overflow: hidden;
+    margin-top: 10px;
+}
+
+.confidence-fill {
+    height: 100%;
+    width: 0%;
+    border-radius: 20px;
+    transition: width 0.8s ease-in-out, background 0.4s ease-in-out;
+}
+
+/* NON-CHEAT → GREEN */
+.confidence-fill.safe {
+    background: linear-gradient(90deg, #2ecc71, #27ae60);
+}
+
+/* CHEAT → RED */
+.confidence-fill.danger {
+    background: linear-gradient(90deg, #e74c3c, #c0392b);
+}
+
+/* =========================
+   REASONS
+========================= */
+.reason-title {
+    font-weight: 600;
+}
+
+.reason-list {
+    list-style: none;
+    padding-left: 0;
+}
+
+.reason-list li {
+    margin-bottom: 8px;
+    color: #444;
+}
+
+.reason-list i {
+    color: #2ecc71;
+    margin-right: 8px;
+}
+
+/* =========================
+   ANIMATION
+========================= */
+.fade-in {
+    animation: fadeIn 0.6s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ============================= */
+/* GRADCAM IMAGE (LARGE & CENTER) */
+/* ============================= */
+/* GRADCAM WRAPPER */
+.gradcam-wrapper {
+    margin-top: 32px;
+    text-align: center;
+}
+
+/* GRADCAM IMAGE – LARGE */
+.gradcam-img {
+    width: 100%;
+    max-width: 650px;
+    height: 320px;        
+
+    border-radius: .25rem!important;
+    background: #f8f9fa;
+    box-shadow: 0 12px 32px rgba(0,0,0,0.15);
+
+    display: block;
+    margin: 0 auto;
+}

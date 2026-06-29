@@ -1,0 +1,271 @@
+{% extends "base.html" %}
+
+{% block title %}
+Image-Based Test - Game Cheat Detection System
+{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <div class="dashboard-card">
+
+                <!-- HEADER -->
+                <div class="card-header">
+                    <h3 class="mb-0">
+                        <i class="fas fa-image me-2"></i>
+                        Image-Based Cheating Detection
+                    </h3>
+                </div>
+
+                <div class="card-body p-4">
+
+                    <!-- INTRO -->
+                    <div class="row mb-4">
+                        <div class="col-md-8">
+                            <p class="lead">
+                                Upload gameplay screenshots to detect cheating behavior using
+                                computer vision and deep learning.
+                            </p>
+                            <div class="alert alert-info">
+                                <i class="fas fa-robot me-2"></i>
+                                CNN-based model with Grad-CAM explainability.
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ===================== -->
+                    <!-- IMAGE UPLOAD FORM -->
+                    <!-- ===================== -->
+                    <div class="upload-section mb-5">
+                        <div class="card border-dashed">
+                            <div class="card-body text-center p-5">
+
+                                <form id="imageForm" enctype="multipart/form-data">
+                                    <input
+                                        type="file"
+                                        class="form-control mb-3"
+                                        id="imageInput"
+                                        name="image"
+                                        accept=".jpg,.jpeg,.png,.bmp"
+                                        required
+                                    >
+
+                                    <button type="submit" class="btn btn-primary btn-lg">
+                                        <i class="fas fa-search me-2"></i>
+                                        Analyze Image
+                                    </button>
+                                </form>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ===================== -->
+                    <!-- IMAGE PREVIEW -->
+                    <!-- ===================== -->
+                    <div id="previewSection" class="d-none mb-4 text-center">
+                        <h5 class="mb-3">
+                            <i class="fas fa-eye me-2"></i>
+                            Image Preview
+                        </h5>
+
+                        <div class="d-flex justify-content-center">
+                            <img
+                                id="imagePreview"
+                                class="img-fluid rounded shadow"
+                                style="max-height:300px;"
+                            >
+                        </div>
+
+                        <p id="imageInfo" class="small text-muted mt-2"></p>
+</div>
+
+
+<!-- ===================== -->
+<!-- RESULTS -->
+<!-- ===================== -->
+<div id="resultsSection" class="result-card mt-4 d-none">
+
+    <!-- STATUS -->
+    <div id="statusBadge" class="status-badge success">
+        NO CHEATING
+    </div>
+
+    <!-- METRICS -->
+    <div class="metrics">
+        <div class="metric">
+            <span class="label">Cheat Probability</span>
+            <span id="cheatProbability" class="value">0.00%</span>
+        </div>
+        <div class="metric">
+            <span class="label">Confidence</span>
+            <span id="confidence" class="value">100.00%</span>
+        </div>
+    </div>
+
+    <!-- CONFIDENCE BAR -->
+    <div class="confidence-bar">
+    <div
+        class="confidence-fill"
+        id="confidenceFill"
+        data-confidence="0"
+    ></div>
+   </div>
+
+
+    <!-- REASONS -->
+    <div id="reasonsSection" class="mt-4 d-none">
+        <h6 class="reason-title">
+            <i class="fas fa-lightbulb me-2"></i>
+            Why this decision?
+        </h6>
+        <ul id="reasonsList" class="reason-list"></ul>
+    </div>
+
+  <!-- GRADCAM -->
+<div class="gradcam-wrapper mt-4 text-center">
+    <h6 class="mb-3">
+        <i class="fas fa-fire me-2"></i>
+        Model Explanation (Grad-CAM)
+    </h6>
+
+   <img
+    id="gradcamImg"
+    class="gradcam-img"
+    alt="Grad-CAM Output"
+>
+</div>
+
+
+</div>
+
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/explain.css') }}">
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    const form = document.getElementById("imageForm");
+    const imageInput = document.getElementById("imageInput");
+
+    const previewSection = document.getElementById("previewSection");
+    const imagePreview = document.getElementById("imagePreview");
+    const imageInfo = document.getElementById("imageInfo");
+
+    const resultsSection = document.getElementById("resultsSection");
+    const statusBadge = document.getElementById("statusBadge");
+    const cheatProbability = document.getElementById("cheatProbability");
+    const confidence = document.getElementById("confidence");
+    const confidenceFill = document.getElementById("confidenceFill");
+    const gradcamImg = document.getElementById("gradcamImg");
+
+    const reasonsSection = document.getElementById("reasonsSection");
+    const reasonsList = document.getElementById("reasonsList");
+
+    // =============================
+    // IMAGE PREVIEW
+    // =============================
+    imageInput.addEventListener("change", function () {
+        const file = this.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = function (e) {
+            imagePreview.src = e.target.result;
+            imageInfo.innerText =
+                `${file.name} (${(file.size / 1024).toFixed(1)} KB)`;
+            previewSection.classList.remove("d-none");
+        };
+        reader.readAsDataURL(file);
+    });
+
+    // =============================
+    // FORM SUBMIT
+    // =============================
+    form.addEventListener("submit", async function (e) {
+        e.preventDefault();
+
+        const formData = new FormData(form);
+
+        const response = await fetch("/upload_image", {
+            method: "POST",
+            body: formData
+        });
+
+        const data = await response.json();
+        console.log("BACKEND DATA:", data);
+
+        if (!data.success) {
+            alert(data.error || "Prediction failed");
+            return;
+        }
+
+        // SHOW RESULTS
+        resultsSection.classList.remove("d-none");
+
+        // STATUS
+        if (data.prediction === "CHEAT") {
+            statusBadge.innerText = "CHEATING DETECTED";
+            statusBadge.className = "status-badge danger";
+        } else {
+            statusBadge.innerText = "NO CHEATING";
+            statusBadge.className = "status-badge success";
+        }
+
+        // METRICS
+        cheatProbability.innerText =
+            Number(data.cheat_probability || 0).toFixed(2) + "%";
+
+        confidence.innerText =
+            Number(data.confidence || 0).toFixed(2) + "%";
+
+        // CONFIDENCE BAR
+        // CONFIDENCE BAR (COLOR BASED ON PREDICTION)
+const confValue = Number(data.confidence || 0);
+
+confidenceFill.style.width = `${confValue}%`;
+
+// Reset classes
+confidenceFill.classList.remove("safe", "danger");
+
+// CHEAT → RED BAR
+if (data.prediction === "CHEAT") {
+    confidenceFill.classList.add("danger");
+}
+// NON-CHEAT → GREEN BAR
+else {
+    confidenceFill.classList.add("safe");
+}
+
+
+        // GRADCAM
+        if (data.gradcam_image) {
+            gradcamImg.src =
+                data.gradcam_image + "?t=" + new Date().getTime();
+            gradcamImg.classList.add("fade-in");
+        }
+
+        // REASONS
+        reasonsList.innerHTML = "";
+
+        if (Array.isArray(data.cheat_reasons) && data.cheat_reasons.length > 0) {
+            data.cheat_reasons.forEach(reason => {
+                const li = document.createElement("li");
+                li.innerHTML = `<i class="fas fa-check-circle"></i> ${reason}`;
+                reasonsList.appendChild(li);
+            });
+            reasonsSection.classList.remove("d-none");
+        } else {
+            reasonsSection.classList.add("d-none");
+        }
+    });
+});
+</script>
+
+{% endblock %}

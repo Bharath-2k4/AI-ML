@@ -1,0 +1,272 @@
+{% extends "base.html" %}
+{% block title %}Social View Analysis - Game Cheat Detection{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-11">
+
+            <div class="dashboard-card shadow-lg">
+                <div class="card-header">
+                    <h3 class="mb-0">
+                        <i class="fas fa-users me-2"></i>Social View Analysis
+                    </h3>
+                </div>
+
+                <div class="card-body p-4">
+
+                    <!-- INTRO -->
+                    <p class="lead">
+                        Analyze entity-level social risk using network interactions,
+                        influence propagation, and structural exposure.
+                    </p>
+
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle me-2"></i>
+                        This view evaluates how an entity (player or team)
+                        is influenced by connected entities in the social network.
+                    </div>
+
+                    <!-- INPUT + DATASET -->
+                    <div class="card border-0 shadow-sm mt-4">
+                        <div class="card-body p-4">
+                            <div class="row align-items-center">
+
+                                <!-- INPUT -->
+                                <div class="col-md-6">
+                                    <label class="form-label fw-semibold text-secondary">
+                                        Entity ID
+                                    </label>
+
+                                    <input
+                                        type="text"
+                                        id="socialPlayerId"
+                                        class="form-control form-control-lg mb-3"
+                                        placeholder="e.g. 1001 or team_1"
+                                        onkeydown="handleSocialEnter(event)">
+
+                                    <button
+                                        type="button"
+                                        class="btn btn-primary btn-lg w-100"
+                                        onclick="runSocialView()">
+                                        <i class="fas fa-network-wired me-2"></i>
+                                        Analyze Social Risk
+                                    </button>
+
+                                    <div class="small text-muted mt-3">
+                                        Player IDs: <strong>1001 – 1050</strong> |
+                                        Team IDs: <strong>team_1 – team_690</strong>
+                                    </div>
+                                </div>
+
+                                <!-- DATASET INFO -->
+                                <div class="col-md-6 mt-4 mt-md-0">
+                                    <div class="p-4 rounded bg-light h-100">
+                                        <h6 class="fw-bold mb-3 text-primary">
+                                            <i class="fas fa-database me-2"></i>
+                                            Dataset Information
+                                        </h6>
+
+                                        <ul class="list-unstyled small mb-0">
+                                            <li><strong>Dataset:</strong> Social Network Interaction Dataset</li>
+                                            <li><strong>Entities:</strong> Players & Teams</li>
+                                            <li><strong>Edges:</strong> Social interactions</li>
+                                            <li><strong>Risk Type:</strong> Structural social exposure</li>
+                                        </ul>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- BACKEND WARNING -->
+                    <div id="backendWarning" class="alert alert-warning mt-4 d-none">
+                        <i class="fas fa-exclamation-triangle me-2"></i>
+                        Backend is processing the request. Please wait…
+                    </div>
+
+                    <!-- 🔥 RESULT + EXPLANATION -->
+                    <div id="socialResultBlock" class="card shadow-lg border-0 mt-4 d-none">
+
+                        <!-- HEADER -->
+                        <div class="card-body bg-light d-flex justify-content-between align-items-center">
+
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-shield-alt text-primary fs-3 me-3"></i>
+                                <div>
+                                    <div class="text-muted small">Prediction</div>
+                                    <div id="prediction" class="fw-bold fs-4"></div>
+                                </div>
+                            </div>
+
+                            <div class="text-end">
+                                <div class="text-muted small">Confidence</div>
+                                <div id="confidence" class="fw-semibold"></div>
+                                <span id="entityBadge" class="badge mt-1"></span>
+                            </div>
+
+                        </div>
+
+                        <!-- BODY -->
+                        <div class="card-body p-4">
+                            <h5 class="text-center mb-4">
+                                Entity-Level Social Risk Explanation
+                            </h5>
+
+                            <div class="row g-4 align-items-stretch">
+
+                                <!-- LEFT -->
+                                <div class="col-md-7">
+                                    <div class="p-3 border rounded text-center">
+                                        <img id="socialLocalShap"
+                                             class="img-fluid rounded"
+                                             style="max-height:420px;"
+                                             alt="SHAP Explanation">
+                                    </div>
+                                </div>
+
+                                <!-- RIGHT -->
+                                <div class="col-md-5 d-flex flex-column">
+                                    <h6 class="mb-3" id="riskExplanationTitle"></h6>
+                                    <ul id="plainReasons" class="mb-4"></ul>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- SOCIAL NETWORK -->
+                    <div id="socialGraphSection" class="mt-5 d-none">
+                        <div class="card border-0 shadow-sm">
+                            <div class="card-body p-4">
+
+                                <h5 class="text-center mb-2">
+                                    <i class="fas fa-project-diagram me-2 text-primary"></i>
+                                    Social Network Context
+                                </h5>
+
+                                <p class="text-center text-muted small mb-4">
+                                    Visual representation of the entity’s local
+                                    social connections and structural exposure.
+                                </p>
+
+                                <div class="text-center">
+                                    <img id="socialGraph"
+                                         class="img-fluid rounded shadow-sm"
+                                         style="max-width:520px;">
+                                </div>
+
+                                <div class="alert alert-secondary mt-4">
+                                    <strong>How to read this graph:</strong><br>
+                                    <span class="text-danger fw-bold">Red</span> → Selected entity<br>
+                                    <span class="text-warning fw-bold">Orange</span> → Structurally risky connections<br>
+                                    <span class="text-secondary fw-bold">Grey</span> → Normal connections
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+function validateEntityId(id) {
+    if (/^\d+$/.test(id)) {
+        const n = parseInt(id, 10);
+        if (n >= 1001 && n <= 1050) return { valid: true, type: "Player" };
+        return { valid: false, message: "Player ID must be between 1001 and 1050." };
+    }
+    if (/^team_\d+$/.test(id)) {
+        const n = parseInt(id.split("_")[1], 10);
+        if (n >= 1 && n <= 690) return { valid: true, type: "Team" };
+        return { valid: false, message: "Team ID must be between team_1 and team_690." };
+    }
+    return { valid: false, message: "Invalid Entity ID format." };
+}
+
+function handleSocialEnter(e) {
+    if (e.key === "Enter") {
+        e.preventDefault();
+        runSocialView();
+    }
+}
+
+function resetUI() {
+    ["socialResultBlock", "socialGraphSection", "backendWarning"]
+        .forEach(id => document.getElementById(id)?.classList.add("d-none"));
+}
+
+function runSocialView() {
+    const id = document.getElementById("socialPlayerId").value.trim();
+    if (!id) return;
+
+    const validation = validateEntityId(id);
+    if (!validation.valid) return alert(validation.message);
+
+    resetUI();
+    document.getElementById("backendWarning").classList.remove("d-none");
+
+    fetch("/social_view", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ player_id: id })
+    })
+    .then(r => r.json())
+    .then(data => {
+        document.getElementById("backendWarning").classList.add("d-none");
+        if (data.error) return alert(data.error);
+
+        document.getElementById("prediction").innerText = data.prediction;
+        document.getElementById("confidence").innerText =
+            (Math.min(data.confidence * 100, 99.9)).toFixed(2) + "%";
+
+        const badge = document.getElementById("entityBadge");
+        badge.innerText = validation.type;
+        badge.className = validation.type === "Player"
+            ? "badge bg-primary"
+            : "badge bg-success";
+
+        document.getElementById("riskExplanationTitle").innerText =
+            data.prediction === "HIGH SOCIAL RISK"
+                ? "Why this entity is risky"
+                : data.prediction === "MEDIUM SOCIAL RISK"
+                ? "Factors contributing to social exposure"
+                : "Why this entity shows low social risk";
+
+        document.getElementById("socialLocalShap").src =
+            data.local_shap + "?t=" + Date.now();
+
+        const ul = document.getElementById("plainReasons");
+        ul.innerHTML = "";
+        (data.plain_reasons || []).forEach(r => {
+            const li = document.createElement("li");
+            li.innerText = r;
+            ul.appendChild(li);
+        });
+
+       
+
+        document.getElementById("socialResultBlock").classList.remove("d-none");
+
+        if (data.social_graph) {
+            document.getElementById("socialGraph").src =
+                data.social_graph + "?t=" + Date.now();
+            document.getElementById("socialGraphSection").classList.remove("d-none");
+        }
+    })
+    .catch(err => {
+        console.error(err);
+        document.getElementById("backendWarning").innerText =
+            "Backend is taking longer than expected.";
+    });
+}
+</script>
+{% endblock %}

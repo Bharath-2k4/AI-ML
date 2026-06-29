@@ -1,0 +1,17 @@
+py -3.9 -m venv myenv
+
+myenv\Scripts\activate
+
+pip install numpy==1.23.5
+pip install protobuf==3.20.3
+pip install tensorflow==2.10.0
+pip install scikit-learn==1.0.2
+pip install flask
+pip install pandas
+pip install joblib
+pip install shap
+pip install opencv-python
+pip install matplotlib
+pip install networkx
+pip install pillow
+pip install seaborn

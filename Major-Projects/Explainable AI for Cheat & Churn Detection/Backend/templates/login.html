@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+
+{% block title %}Login - Game Cheat Detection System{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-5">
+            <div class="form-container slide-up">
+                <div class="text-center mb-4">
+                    <h2 class="fw-bold text-primary">
+                        <i class="fas fa-sign-in-alt me-2"></i>Login
+                    </h2>
+                    <p class="text-muted">Access your GameGuard account</p>
+                </div>
+
+                <form method="POST" action="{{ url_for('login') }}">
+                    <div class="mb-3">
+                        <label for="username" class="form-label">
+                            <i class="fas fa-user me-2"></i>Username
+                        </label>
+                        <input type="text" class="form-control" id="username" name="username" 
+                               required placeholder="Enter your username">
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="password" class="form-label">
+                            <i class="fas fa-lock me-2"></i>Password
+                        </label>
+                        <input type="password" class="form-control" id="password" name="password" 
+                               required placeholder="Enter your password">
+                    </div>
+
+                    <div class="d-grid mb-3">
+                        <button type="submit" class="btn btn-primary btn-lg">
+                            <i class="fas fa-sign-in-alt me-2"></i>Login
+                        </button>
+                    </div>
+
+                    <div class="text-center">
+                        <p class="mb-0">
+                            Don't have an account? 
+                            <a href="{{ url_for('register') }}" class="text-decoration-none">Register here</a>
+                        </p>
+                    </div>
+                </form>
+            </div>
+
+            <div class="text-center mt-4">
+                <div class="card p-3">
+                    <h6 class="mb-3">Demo Accounts</h6>
+                    <div class="row">
+                        <div class="col-6">
+                            <small class="text-muted">Username: demo1</small><br>
+                            <small class="text-muted">Password: password123</small>
+                        </div>
+                        <div class="col-6">
+                            <small class="text-muted">Username: demo2</small><br>
+                            <small class="text-muted">Password: password123</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

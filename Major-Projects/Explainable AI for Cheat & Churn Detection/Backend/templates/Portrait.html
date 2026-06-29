@@ -1,0 +1,373 @@
+{% extends "base.html" %}
+
+{% block title %}Portrait-Based Player Analysis{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <div class="dashboard-card">
+                <div class="card-header">
+                    <h3 class="mb-0">
+                        <i class="fas fa-user me-2"></i>
+                        Portrait-Based Player Analysis
+                    </h3>
+                </div>
+
+                <div class="card-body p-4">
+
+                    <!-- INTRO -->
+                    <div class="row mb-4">
+                        <div class="col-md-8">
+                            <p class="lead">
+                                Enter a <strong>Player ID</strong> to analyze cheating and churn behavior
+                                using trained machine learning models with SHAP explainability.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- PLAYER ID FORM -->
+                    <div class="row mb-4">
+    <!-- LEFT: PLAYER INPUT -->
+    <div class="col-md-6">
+        <div class="card h-100 border-info">
+            <div class="card-body">
+                <h5 class="card-title">
+                    <i class="fas fa-id-badge me-2"></i>Enter Player ID
+                </h5>
+
+                <form method="POST">
+                    <div class="mb-3">
+                        <label class="form-label">Player ID</label>
+                        <input
+                            type="text"
+                            name="player_id"
+                            class="form-control"
+                            placeholder="1 - 10000 "
+                            required
+                        >
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-lg w-100">
+                        <i class="fas fa-search me-2"></i>Analyze Player
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- RIGHT: DATASET INFO -->
+    <div class="col-md-6">
+        <div class="card h-100 border-info">
+            <div class="card-body">
+                <h5 class="card-title">
+                    <i class="fas fa-database me-2"></i>Dataset Information
+                </h5>
+
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">
+                        <strong>Dataset Name: </strong>
+                         {{ dataset_info.name }}
+                    </li>
+                    <li class="list-group-item">
+                        <strong>Total Rows:</strong>
+                        {{ dataset_info.rows }}
+                    </li>
+                    <li class="list-group-item">
+                        <strong>Features Used:</strong>
+                        {{ dataset_info.features }}
+                    </li>
+                </ul>
+
+                <div class="alert alert-info mt-3 mb-0">
+                    <i class="fas fa-info-circle me-2"></i>
+                    Trained ML models with SHAP explainability
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- RESULTS -->
+{% if result %}
+<div class="result-wrapper mt-4">
+
+    <div class="result-card">
+
+        <!-- TITLE -->
+        <h4 class="mb-3">
+            <i class="fas fa-chart-bar me-2"></i>
+            Analysis Results
+        </h4>
+
+        <!-- BASIC INFO -->
+        <div class="row mb-4">
+            <div class="col-md-6">
+                <div class="d-flex align-items-start gap-5">
+
+                    <!-- Player ID -->
+                    <div>
+                        <h6 class="text-muted mb-2">Player ID</h6>
+                        <span class="badge bg-info fs-6 px-4 py-2">
+                            {{ result.player_id }}
+                        </span>
+                    </div>
+
+                    <!-- Actual Cheat
+                    <div>
+                        <h6 class="text-muted mb-2">Actual Cheat</h6>
+                        {% if result.actual_cheat == 1 %}
+                            <span class="badge bg-danger fs-6 px-4 py-2">
+                                <i class="fas fa-times me-1"></i> Yes
+                            </span>
+                        {% else %}
+                            <span class="badge bg-success fs-6 px-4 py-2">
+                                <i class="fas fa-check me-1"></i> No
+                            </span>
+                        {% endif %}
+                    </div>
+
+                    Actual Churn 
+                    <div>
+                        <h6 class="text-muted mb-2">Actual Churn</h6>
+                        {% if result.actual_churn == 1 %}
+                            <span class="badge bg-warning text-dark fs-6 px-4 py-2">
+                                <i class="fas fa-exclamation-triangle me-1"></i> Yes
+                            </span>
+                        {% else %}
+                            <span class="badge bg-success fs-6 px-4 py-2">
+                                <i class="fas fa-check me-1"></i> No
+                            </span>
+                        {% endif %}
+                    </div> -->
+
+                </div>
+            </div>
+
+            <!-- Empty column for perfect alignment -->
+            <div class="col-md-6"></div>
+        </div>
+
+<div class="card mt-4 shadow-sm border-1">
+    <div class="card-body">
+
+   <!-- PREDICTIONS -->
+<div class="row mb-4">
+
+    <!-- CHEAT -->
+    <div class="col-md-6">
+        <div class="prediction-box cheat-box">
+            <h5 class="text-success mb-3">Cheating Detection</h5>
+
+            <p>
+    <strong>Prediction:</strong>
+    {% if result.cheat_pred == "Cheater" %}
+        <span class="badge bg-danger">
+            <i class="fas fa-times me-1"></i> Cheater
+        </span>
+    {% else %}
+        <span class="badge bg-success">
+            <i class="fas fa-check me-1"></i> Legit
+        </span>
+    {% endif %}
+</p>
+
+
+            <p class="mb-2">
+                <strong>Confidence:</strong> {{ result.cheat_conf }}%
+            </p>
+
+            <!-- Confidence Bar -->
+           <div class="confidence-bar-wrapper mt-2">
+    <div
+        class="confidence-bar
+        {% if result.cheat_pred == 'Cheater' %}
+            bg-danger
+        {% else %}
+            bg-success
+        {% endif %}"
+        style="width: {{ result.cheat_conf }}%;"
+    ></div>
+</div>
+
+        </div>
+    </div>
+
+    <!-- CHURN -->
+    <div class="col-md-6">
+        <div class="prediction-box churn-box">
+            <h5 class="text-info mb-3">Churn Prediction</h5>
+
+            <p>
+    <strong>Prediction:</strong>
+    {% if result.churn_pred == "Likely to Leave" %}
+        <span class="badge bg-warning text-dark">Likely to Leave</span>
+    {% else %}
+        <span class="badge bg-info">Will Stay</span>
+    {% endif %}
+</p>
+
+
+            <p class="mb-2">
+                <strong>Confidence:</strong> {{ result.churn_conf }}%
+            </p>
+
+            <!-- Confidence Bar -->
+          <div class="confidence-bar-wrapper mt-2">
+    <div
+        class="confidence-bar
+            {% if result.churn_pred == 'Likely to Leave' %}
+                bg-warning
+            {% else %}
+                bg-info
+            {% endif %}"
+        style="width: {{ result.churn_conf }}%;"
+    ></div>
+</div>
+
+
+        </div>
+    </div>
+
+</div>
+
+<!-- SHAP REASONS (SINGLE BLOCK) -->
+
+<h5 class="mb-4">
+    <i class="fas fa-brain me-2 text-primary"></i>
+    Model Explanation (SHAP Reasons)
+</h5>
+
+<div class="row">
+
+    <!-- CHEAT SHAP -->
+    <div class="col-md-6">
+        <h6 class="text-success mb-3">
+            <i class="fas fa-bug me-1"></i>
+            Cheating Detection Reasons
+        </h6>
+
+        <table class="table table-sm shap-table">
+            <thead class="table-light">
+                <tr>
+                    <th>Feature</th>
+                    <th class="text-end">Trend</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for reason in result.cheat_reasons %}
+                <tr>
+                    <td>{{ reason.feature }}</td>
+                    <td class="text-end">
+                        {% if reason.dir == "up" %}
+                            <i class="fas fa-arrow-up text-danger"
+                               title="Increases cheating risk"></i>
+                        {% elif reason.dir == "down" %}
+                            <i class="fas fa-arrow-down text-success"
+                               title="Reduces cheating risk"></i>
+                        {% else %}
+                            <i class="fas fa-minus text-muted"
+                               title="Neutral effect"></i>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="2" class="text-muted text-center">
+                        No explanation available
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- CHURN SHAP -->
+    <div class="col-md-6">
+        <h6 class="text-info mb-3">
+            <i class="fas fa-user-slash me-1"></i>
+            Churn Prediction Reasons
+        </h6>
+
+        <table class="table table-sm shap-table">
+            <thead class="table-light">
+                <tr>
+                    <th>Feature</th>
+                    <th class="text-end">Effect</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for reason in result.churn_reasons %}
+                <tr>
+                    <td>{{ reason.feature }}</td>
+                    <td class="text-end">
+                        {% if reason.dir == "up" %}
+                            <span class="badge bg-warning text-dark">
+                                ⬆ Increases Churn Risk
+                            </span>
+                        {% elif reason.dir == "down" %}
+                            <span class="badge bg-success">
+                                ⬇ Retention Signal
+                            </span>
+                        {% else %}
+                            <span class="badge bg-secondary">
+                                ➖ Neutral
+                            </span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="2" class="text-muted text-center">
+                        No explanation available
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+</div>
+
+
+ 
+
+
+    </div>
+</div>
+
+        <!-- FEATURE SNAPSHOT -->
+        <div class="mt-4">
+            <h5>Player Feature Snapshot</h5>
+            <div class="bg-light p-3 rounded">
+                {% for key, value in result.features.items() %}
+                <div class="row mb-2">
+                    <div class="col-6">
+                        <strong>{{ key.replace('_',' ').title() }}</strong>
+                    </div>
+                    <div class="col-6">
+                        {{ value }}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+       
+
+{% endif %}
+ <!-- ACTION -->
+        <div class="mt-4 text-center">
+            <a href="{{ url_for('dashboard') }}" class="btn btn-outline-primary">
+                <i class="fas fa-tachometer-alt me-2"></i>
+                Back to Dashboard
+            </a>
+        </div>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,5 @@
+Backend/myenv/
+Backend/myenv_backup/
+__pycache__/
+*.pyc
+.ipynb_checkpoints/

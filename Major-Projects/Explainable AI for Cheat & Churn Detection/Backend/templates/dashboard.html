@@ -1,0 +1,519 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - Game Cheat Detection System{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <!-- Welcome Section -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <div class="dashboard-card">
+                <div class="card-body p-4">
+                    <div class="row align-items-center">
+                        <div class="col-md-8">
+                            <h2 class="fw-bold text-primary mb-2">
+                                <i class="fas fa-tachometer-alt me-2"></i>Welcome, {{ session.username }}!
+                            </h2>
+                            <p class="lead mb-0">Monitor and analyze game cheating patterns and player churn predictions.</p>
+                        </div>
+                        <div class="col-md-4 text-end">
+                            <div class="stat-card bg-primary text-white p-3 rounded-3">
+                                <h4 class="mb-0">{{ predictions|length }}</h4>
+                                <small>Total Predictions</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <h3 class="mb-4"><i class="fas fa-bolt me-2"></i>Quick Detection Tests</h3>
+            <div class="row g-4">
+                <div class="col-md-6 col-lg-3">
+                    <a href="{{ url_for('portrait_analysis')}}" class="text-decoration-none">
+                        <div class="test-card">
+                            <div class="test-icon">
+                                <i class="fas fa-chart-line"></i>
+                            </div>
+                            <h5>Feature-Based Test</h5>
+                            <p class="text-muted">Analyze player behavior patterns using statistical features</p>
+                            <span class="badge bg-primary">ML Powered</span>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-md-6 col-lg-3">
+                    <a href="{{ url_for('log_test') }}" class="text-decoration-none">
+                        <div class="test-card">
+                            <div class="test-icon">
+                                <i class="fas fa-users"></i>
+                            </div>
+                            <h5>Social Analysis</h5>
+                            <p class="text-muted">Process game logs to identify suspicious activities</p>
+                            <span class="badge bg-success">Real-time</span>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-md-6 col-lg-3">
+                    <a href="{{ url_for('churn_test') }}" class="text-decoration-none">
+                        <div class="test-card">
+                            <div class="test-icon">
+                                <i class="fas fa-file-alt"></i>
+                            </div>
+                            <h5>Behaviour Detection</h5>
+                            <p class="text-muted">Predict player retention and identify at-risk players</p>
+                            <span class="badge bg-warning">Predictive</span>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-md-6 col-lg-3">
+                    <a href="{{ url_for('image_test') }}" class="text-decoration-none">
+                        <div class="test-card">
+                            <div class="test-icon">
+                                <i class="fas fa-image"></i>
+                            </div>
+                            <h5>Image-Based Test</h5>
+                            <p class="text-muted">Analyze gameplay screenshots for cheating indicators</p>
+                            <span class="badge bg-info">AI Vision</span>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    
+
+    <!-- Prediction History -->
+    <div class="row">
+        <div class="col-12">
+            <div class="dashboard-card">
+                <div class="card-header">
+                    <h4 class="mb-0"><i class="fas fa-history me-2"></i>Prediction History</h4>
+                </div>
+                <div class="card-body">
+                    {% if predictions %}
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Test Type</th>
+                                    <th>Cheating</th>
+                                    <th>Churn</th>
+                                    <th>Confidence</th>
+                                    <th>Date & Time</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for prediction in predictions %}
+                                <tr>
+                                    <td>
+                                        <span class="badge 
+                                            {% if prediction[2] == 'portrait_analysis' %}bg-primary
+                                            {% elif prediction[2] == 'log_test' %}bg-success
+                                            {% elif prediction[2] == 'churn_test' %}bg-warning
+                                            {% else %}bg-info{% endif %}">
+                                            {{ prediction[2].replace('_', ' ').title() }}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        {% if prediction[3] == 1 %}
+                                        <span class="badge bg-danger">Cheater</span>
+                                        {% else %}
+                                        <span class="badge bg-success">Legit</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% if prediction[4] == 1 %}
+                                        <span class="badge bg-warning">Likely to Leave</span>
+                                        {% else %}
+                                        <span class="badge bg-success">Will Stay</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <small>Cheat: {{ prediction[5] }}%</small><br>
+                                        <small>Churn: {{ prediction[6] }}%</small>
+                                    </td>
+                                    <td>
+                                        <small>{{ prediction[9] }}</small>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% else %}
+                    <div class="text-center py-4">
+                        <i class="fas fa-inbox fa-3x text-muted mb-3"></i>
+                        <h5 class="text-muted">No predictions yet</h5>
+                        <p class="text-muted">Run your first detection test to see results here.</p>
+                        <a href="{{ url_for('portrait_analysis') }}" class="btn btn-primary">
+                            <i class="fas fa-bolt me-2"></i>Run First Test
+                        </a>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <!-- Feedback Section -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <div class="dashboard-card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h4 class="mb-0"><i class="fas fa-comments me-2"></i>Provide Feedback</h4>
+                    <button class="btn btn-sm btn-outline-primary" type="button" data-bs-toggle="collapse" data-bs-target="#feedbackForm">
+                        <i class="fas fa-plus me-1"></i>Add Feedback
+                    </button>
+                </div>
+                <div class="card-body">
+                    <!-- Feedback Form -->
+                    <div class="collapse" id="feedbackForm">
+                        <div class="card card-body mb-4">
+                            <h5><i class="fas fa-edit me-2"></i>Share Your Experience</h5>
+                            <form id="feedbackFormElement">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label class="form-label">Select Prediction</label>
+                                            <select class="form-select" id="predictionSelect" required>
+                                                <option value="">Choose a prediction...</option>
+                                                {% for prediction in predictions %}
+                                                <option value="{{ prediction[0] }}">
+                                                    {{ prediction[2].replace('_', ' ').title() }} - 
+                                                    {{ prediction[9][:16] }}
+                                                </option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label class="form-label">Rating</label>
+                                            <div class="rating-stars">
+                                                {% for i in range(5, 0, -1) %}
+                                                <input type="radio" id="star{{ i }}" name="rating" value="{{ i }}" class="d-none">
+                                                <label for="star{{ i }}" class="star-label">
+                                                    <i class="fas fa-star"></i>
+                                                </label>
+                                                {% endfor %}
+                                            </div>
+                                            <div class="rating-labels">
+                                                <small class="text-muted">1 - Poor | 5 - Excellent</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Comments</label>
+                                    <textarea class="form-control" id="feedbackComments" rows="3" 
+                                              placeholder="Share your thoughts about the prediction accuracy, system usability, or suggestions for improvement..."></textarea>
+                                </div>
+                                <div class="text-end">
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="fas fa-paper-plane me-2"></i>Submit Feedback
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- User Feedback History -->
+                    <h5 class="mb-3"><i class="fas fa-history me-2"></i>Your Feedback History</h5>
+                    {% if user_feedback %}
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Prediction</th>
+                                    <th>Rating</th>
+                                    <th>Comments</th>
+                                    <th>Helpful</th>
+                                    <th>Date</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for feedback in user_feedback %}
+                                <tr>
+                                    <td>
+                                        <span class="badge 
+                                            {% if feedback[8] == 'portrait_analysis' %}bg-primary
+                                            {% elif feedback[8] == 'log_test' %}bg-success
+                                            {% elif feedback[8] == 'churn_test' %}bg-warning
+                                            {% else %}bg-info{% endif %}">
+                                            {{ feedback[8].replace('_', ' ').title() }}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <div class="star-rating-display">
+                                            {% for i in range(1, 6) %}
+                                            <i class="fas fa-star{% if i <= feedback[3] %} text-warning{% else %} text-muted{% endif %}"></i>
+                                            {% endfor %}
+                                        </div>
+                                    </td>
+                                    <td>
+                                        {% if feedback[4] %}
+                                        <small>{{ feedback[4][:100] }}{% if feedback[4]|length > 100 %}...{% endif %}</small>
+                                        {% else %}
+                                        <small class="text-muted">No comments</small>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-success">{{ feedback[5] }}</span> /
+                                        <span class="badge bg-danger">{{ feedback[6] }}</span>
+                                    </td>
+                                    <td>
+                                        <small>{{ feedback[7] }}</small>
+                                    </td>
+                                    <td>
+                                        <button class="btn btn-sm btn-outline-success me-1" 
+                                                onclick="markHelpful({{ feedback[0] }})"
+                                                title="Mark as Helpful">
+                                            <i class="fas fa-thumbs-up"></i>
+                                        </button>
+                                        <button class="btn btn-sm btn-outline-danger" 
+                                                onclick="markNotHelpful({{ feedback[0] }})"
+                                                title="Mark as Not Helpful">
+                                            <i class="fas fa-thumbs-down"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% else %}
+                    <div class="text-center py-4">
+                        <i class="fas fa-comments fa-3x text-muted mb-3"></i>
+                        <h5 class="text-muted">No feedback submitted yet</h5>
+                        <p class="text-muted">Share your experience to help us improve the system.</p>
+                        <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#feedbackForm">
+                            <i class="fas fa-plus me-2"></i>Add Your First Feedback
+                        </button>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    
+    <!-- Statistics Overview -->
+    <div class="row mt-4">
+        <div class="col-md-3">
+            <div class="dashboard-card text-center">
+                <div class="card-body">
+                    <h3 class="text-primary">{{ predictions|selectattr("3", "equalto", 1)|list|length }}</h3>
+                    <p class="text-muted mb-0">Cheating Detected</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="dashboard-card text-center">
+                <div class="card-body">
+                    <h3 class="text-warning">{{ predictions|selectattr("4", "equalto", 1)|list|length }}</h3>
+                    <p class="text-muted mb-0">Churn Predicted</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="dashboard-card text-center">
+                <div class="card-body">
+                    <h3 class="text-success">{{ predictions|length }}</h3>
+                    <p class="text-muted mb-0">Total Tests</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="dashboard-card text-center">
+                <div class="card-body">
+                    <h3 class="text-info">{{ user_feedback|length }}</h3>
+                    <p class="text-muted mb-0">Feedback Submitted</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Star rating functionality
+    document.querySelectorAll('.star-label').forEach(label => {
+        label.addEventListener('click', function() {
+            const stars = this.parentElement.querySelectorAll('.star-label');
+            const rating = this.htmlFor.replace('star', '');
+            
+            stars.forEach(star => {
+                const starNumber = star.htmlFor.replace('star', '');
+                if (starNumber <= rating) {
+                    star.querySelector('i').classList.add('text-warning');
+                    star.querySelector('i').classList.remove('text-muted');
+                } else {
+                    star.querySelector('i').classList.remove('text-warning');
+                    star.querySelector('i').classList.add('text-muted');
+                }
+            });
+        });
+    });
+
+    // Feedback form submission
+    document.getElementById('feedbackFormElement').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const predictionId = document.getElementById('predictionSelect').value;
+        const rating = document.querySelector('input[name="rating"]:checked');
+        const comments = document.getElementById('feedbackComments').value;
+        
+        if (!predictionId || !rating) {
+            showAlert('Please select a prediction and provide a rating.', 'warning');
+            return;
+        }
+        
+        const formData = new FormData();
+        formData.append('prediction_id', predictionId);
+        formData.append('rating', rating.value);
+        formData.append('comments', comments);
+        
+        fetch('/submit_feedback', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.error) {
+                showAlert(data.error, 'danger');
+            } else {
+                showAlert('Feedback submitted successfully!', 'success');
+                document.getElementById('feedbackFormElement').reset();
+                // Reset stars
+                document.querySelectorAll('.star-label i').forEach(star => {
+                    star.classList.remove('text-warning');
+                    star.classList.add('text-muted');
+                });
+                // Collapse form
+                const collapse = new bootstrap.Collapse(document.getElementById('feedbackForm'));
+                collapse.hide();
+                // Reload page after a delay to show updated feedback
+                setTimeout(() => {
+                    window.location.reload();
+                }, 1500);
+            }
+        })
+        .catch(error => {
+            showAlert('Error submitting feedback: ' + error.message, 'danger');
+        });
+    });
+
+    function markHelpful(feedbackId) {
+        const formData = new FormData();
+        formData.append('feedback_id', feedbackId);
+        formData.append('action', 'helpful');
+        
+        fetch('/feedback_helpful', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                showAlert('Marked as helpful!', 'success');
+                setTimeout(() => {
+                    window.location.reload();
+                }, 1000);
+            }
+        });
+    }
+
+    function markNotHelpful(feedbackId) {
+        const formData = new FormData();
+        formData.append('feedback_id', feedbackId);
+        formData.append('action', 'not_helpful');
+        
+        fetch('/feedback_helpful', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                showAlert('Marked as not helpful!', 'info');
+                setTimeout(() => {
+                    window.location.reload();
+                }, 1000);
+            }
+        });
+    }
+
+    // Auto-expand feedback form if there are predictions but no feedback
+    document.addEventListener('DOMContentLoaded', function() {
+        const predictionsExist = {{ predictions|length }};
+        const feedbackExists = {{ user_feedback|length }};
+        
+        if (predictionsExist > 0 && feedbackExists === 0) {
+            // Auto-expand feedback form after a delay
+            setTimeout(() => {
+                const collapse = new bootstrap.Collapse(document.getElementById('feedbackForm'));
+                collapse.show();
+            }, 1000);
+        }
+    });
+</script>
+
+<style>
+    /* Star Rating Styles */
+    .rating-stars {
+        display: flex;
+        flex-direction: row-reverse;
+        justify-content: flex-end;
+        gap: 5px;
+    }
+
+    .star-label {
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    .star-label i {
+        font-size: 1.5rem;
+        color: #dee2e6;
+        transition: all 0.2s ease;
+    }
+
+    .star-label:hover i,
+    .star-label:hover ~ .star-label i {
+        color: #ffc107 !important;
+    }
+
+    input[type="radio"]:checked ~ .star-label i {
+        color: #ffc107 !important;
+    }
+
+    .rating-labels {
+        margin-top: 5px;
+        text-align: center;
+    }
+
+    .star-rating-display {
+        display: flex;
+        gap: 2px;
+    }
+
+    .star-rating-display i {
+        font-size: 0.9rem;
+    }
+
+    /* Feedback table styles */
+    .table-responsive {
+        max-height: 400px;
+    }
+</style>
+{% endblock %}
