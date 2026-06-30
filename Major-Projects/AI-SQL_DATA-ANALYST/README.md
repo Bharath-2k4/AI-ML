@@ -1,177 +1,373 @@
-📊 AI SQL Data Analyst Agent
+# 📊 AI SQL Data Analyst Agent
 
-An AI-powered SQL Data Analyst built with Streamlit, Groq LLM, SQLite, and Python that allows users to analyze CSV datasets using natural language. Simply upload a CSV file, ask questions in plain English, and the application automatically generates SQL queries, executes them, visualizes the results, and provides AI-generated insights.
+> An AI-powered SQL Data Analyst that lets users analyze CSV datasets using natural language. Upload a CSV file, ask questions in plain English, and the application automatically generates SQL queries, executes them on SQLite, visualizes the results, and provides AI-generated insights.
 
-🚀 Features
-📁 Upload any CSV dataset
-🤖 Ask questions using natural language
-🧠 AI automatically generates SQLite queries
-⚡ Executes SQL queries on uploaded data
-📊 Displays query results in an interactive table
-📈 Automatically generates visualizations
-💡 AI-generated insights for query results
-📥 Download query results as CSV
-🗑️ Clear chat history
-📋 View generated SQL query
-📌 Sidebar with dataset statistics and preview
-💬 ChatGPT-inspired conversational interface
-🖥️ Demo
-Home Interface
-Upload CSV
-Ask questions naturally
-AI generates SQL
-View results
-Download results
+---
 
-Example Questions:
+## ✨ Features
 
-Show the top 10 strongest Pokémon
-Which Pokémon has the highest HP?
-List all Legendary Pokémon
-Average Attack by Type
-Show all Fire type Pokémon
-Top 5 fastest Pokémon
-Count Pokémon in each Generation
-🛠️ Tech Stack
-Technology	Purpose
-Python	Backend
-Streamlit	Web Application
-Groq API	Large Language Model
-SQLite	Query Execution
-Pandas	Data Processing
-Matplotlib	Data Visualization
-LangChain	LLM Integration
-python-dotenv	Environment Variables
-📂 Project Structure
+- 📁 Upload any CSV dataset
+- 🤖 Ask questions in natural language
+- 🧠 AI generates SQLite queries automatically
+- ⚡ Executes SQL queries on uploaded data
+- 📊 Displays query results in interactive tables
+- 📈 Automatically generates charts
+- 💡 AI-generated insights for every query
+- 📥 Download query results as CSV
+- 📋 View generated SQL query
+- 🗑️ Clear chat history
+- 📌 Dataset preview and statistics
+- 💬 ChatGPT-inspired conversational interface
+- ⚙️ Built using Groq LLM + LangChain
+
+---
+
+# 📸 Screenshots
+
+Add your screenshots here.
+
+```
+assets/
+└── screenshots/
+    ├── home.png
+    ├── upload_dataset.png
+    ├── generated_sql.png
+    ├── query_result.png
+    ├── visualization.png
+    └── ai_insight.png
+```
+
+---
+
+# 🎥 Demo
+
+You can also add a GIF demonstration.
+
+```
+assets/
+└── demo.gif
+```
+
+---
+
+# 🛠️ Tech Stack
+
+| Technology | Purpose |
+|------------|---------|
+| Python | Backend |
+| Streamlit | Web Application |
+| SQLite | Database |
+| Groq API | Large Language Model |
+| LangChain | LLM Integration |
+| Pandas | Data Processing |
+| Matplotlib | Data Visualization |
+| python-dotenv | Environment Variables |
+
+---
+
+# 📂 Project Structure
+
+```text
 AI_SQL_DATA_ANALYST/
 │
 ├── app.py
 ├── data.db
-├── .env
 ├── requirements.txt
 ├── README.md
+├── .env
 │
 └── assets/
     ├── screenshots/
     └── demo.gif
-⚙️ Installation
-1. Clone Repository
+```
+
+---
+
+# 🚀 Installation Guide
+
+## 1️⃣ Clone the Repository
+
+```bash
 git clone https://github.com/yourusername/AI_SQL_DATA_ANALYST.git
 
 cd AI_SQL_DATA_ANALYST
-2. Create Virtual Environment
+```
+
+---
+
+## 2️⃣ Create Virtual Environment
+
+### Windows
+
+```bash
 python -m venv myenv
+```
 
-Activate Environment
+Activate
 
-Windows
-
+```bash
 myenv\Scripts\activate
+```
 
-Mac/Linux
+### Linux / macOS
 
+```bash
+python3 -m venv myenv
+```
+
+Activate
+
+```bash
 source myenv/bin/activate
-3. Install Dependencies
+```
+
+---
+
+## 3️⃣ Install Dependencies
+
+Using requirements.txt
+
+```bash
 pip install -r requirements.txt
+```
 
-or
+Or install manually
 
-pip install streamlit pandas matplotlib langchain langchain-groq python-dotenv
-4. Create .env
+```bash
+pip install streamlit
+pip install pandas
+pip install matplotlib
+pip install langchain
+pip install langchain-community
+pip install langchain-groq
+pip install python-dotenv
+```
 
-Create a file named:
+---
 
+## 4️⃣ Get Groq API Key
+
+1. Visit https://console.groq.com
+2. Sign in
+3. Create an API Key
+4. Copy the API Key
+
+---
+
+## 5️⃣ Create `.env`
+
+Create a file named
+
+```
 .env
+```
 
-Add your Groq API Key
+Add
 
+```env
 GROQ_API_KEY=your_groq_api_key_here
-5. Run Application
+```
+
+---
+
+## 6️⃣ Run the Project
+
+```bash
 streamlit run app.py
-💬 Example Queries
-Show all Fire type Pokémon
+```
 
-Top 10 Pokémon by HP
+The application will open automatically in your browser.
 
-Average Attack for each Type
+---
 
-Legendary Pokémon
+# 💬 Example Questions
 
-Top 5 fastest Pokémon
+Try asking:
 
-Which Pokémon has the highest Attack?
+- Show all Fire-type Pokémon
+- Top 10 strongest Pokémon
+- Which Pokémon has the highest HP?
+- Which Pokémon has the highest Speed?
+- Show all Legendary Pokémon
+- Count Pokémon in each Generation
+- Average Attack by Type
+- Top 5 fastest Pokémon
+- Show Pokémon with HP greater than 100
+- List Pokémon sorted by Defense
+- Show Pokémon with the highest Special Attack
+- Average HP of Legendary Pokémon
+- Count Pokémon by Type
+- Show Pokémon from Generation 3
+- Which Type has the highest average Attack?
 
-Count Pokémon in each Generation
+---
 
-Show Pokémon with HP greater than 100
-📈 Workflow
-Upload CSV
-      │
-      ▼
-Store Data in SQLite
-      │
-      ▼
-Ask Question
-      │
-      ▼
-Groq LLM Generates SQL
-      │
-      ▼
-Execute SQL
-      │
-      ▼
-Display Results
-      │
-      ▼
-Generate Visualization
-      │
-      ▼
-Generate AI Insight
-📸 Screenshots
+# 🔄 Workflow
 
-Add screenshots inside:
+```text
+                Upload CSV
+                     │
+                     ▼
+         Store Data in SQLite
+                     │
+                     ▼
+        User asks a question
+                     │
+                     ▼
+      Groq LLM generates SQL
+                     │
+                     ▼
+        Execute SQL Query
+                     │
+                     ▼
+          Display Results
+                     │
+                     ▼
+      Generate Visualization
+                     │
+                     ▼
+        Generate AI Insight
+```
 
-assets/screenshots/
+---
 
-Example:
+# 📊 Current Features
 
-Home Page
+✅ CSV Upload
 
-Chat Interface
+✅ SQLite Database Creation
 
-Generated SQL
+✅ Natural Language to SQL
 
-Results
+✅ AI SQL Generation
 
-Visualization
+✅ SQL Execution
 
-AI Insight
-🔮 Future Improvements
-📊 Smart chart selection (Bar, Pie, Scatter, Line)
-📄 Export analysis as PDF
-📈 Interactive Plotly visualizations
-📂 Multiple dataset support
-💾 Save chat history
-🧮 Advanced SQL optimization
-🌐 Cloud deployment
-🔍 Dataset profiling
-📉 Dashboard analytics
-🤝 Contributing
+✅ Query Results
 
-Contributions, issues, and feature requests are welcome.
+✅ Automatic Visualization
 
-Feel free to fork the repository and submit a pull request.
+✅ AI Insights
 
-📜 License
+✅ Download Result CSV
+
+✅ Dataset Preview
+
+✅ Dataset Statistics
+
+✅ Chat Interface
+
+✅ Clear Chat
+
+---
+
+# 📈 Future Improvements
+
+- Smart chart selection (Bar, Pie, Scatter, Line)
+- Plotly interactive charts
+- Export analysis as PDF
+- Multiple dataset support
+- Query history
+- Save chat history
+- AI dashboard
+- User authentication
+- Cloud deployment
+- Dark/Light mode
+- Voice input
+- Database connection support (MySQL/PostgreSQL)
+
+---
+
+# ⚙️ Requirements
+
+```
+Python 3.10+
+
+Streamlit
+
+Pandas
+
+Matplotlib
+
+SQLite3
+
+LangChain
+
+LangChain-Groq
+
+python-dotenv
+```
+
+---
+
+# 🤝 Contributing
+
+Contributions are welcome.
+
+Steps:
+
+1. Fork the repository
+2. Create a feature branch
+
+```bash
+git checkout -b feature-name
+```
+
+3. Commit changes
+
+```bash
+git commit -m "Added new feature"
+```
+
+4. Push changes
+
+```bash
+git push origin feature-name
+```
+
+5. Create a Pull Request
+
+---
+
+# 📝 License
 
 This project is licensed under the MIT License.
 
-👨‍💻 Author
+---
 
-RB
+# 👨‍💻 Author
 
-🎓 B.E. Artificial Intelligence & Data Science
-💻 Python | SQL | AI | Data Analytics | Machine Learning
-🚀 Passionate about building AI-powered applications
+**RB**
 
-⭐ If you found this project helpful, consider giving it a star on GitHub!
+**Artificial Intelligence & Data Science Engineer**
+
+### Skills
+
+- Python
+- SQL
+- Artificial Intelligence
+- Machine Learning
+- Data Analytics
+- Streamlit
+- LangChain
+- Groq API
+
+---
+
+# 🌟 Support
+
+If you found this project useful,
+
+⭐ Star this repository
+
+🍴 Fork the project
+
+🛠️ Contribute to improve it
+
+---
+
+## Thank You ❤️
+
+Thank you for checking out this project.
+
+Happy Coding! 🚀
