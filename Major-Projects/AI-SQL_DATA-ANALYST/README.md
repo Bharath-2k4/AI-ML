@@ -6,10 +6,9 @@
 
 # 📸 Application UI
 
-## 📸 Application UI
-
-![Application UI](assets/UI.png)
-
+<p align="center">
+    <img src="assets/UI.png" width="100%">
+</p>
 ---
 
 ## 🚀 Features
