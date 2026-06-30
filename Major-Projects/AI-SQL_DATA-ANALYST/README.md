@@ -9,7 +9,6 @@
 <p align="center">
     <img src="assets/UI.png" width="100%">
 </p>
----
 
 ## 🚀 Features
 
