@@ -6,9 +6,9 @@
 
 # 📸 Application UI
 
-<p align="center">
-    <img src="assets/UI.png" alt="AI SQL Data Analyst UI" width="100%">
-</p>
+## 📸 Application UI
+
+![Application UI](assets/UI.png)
 
 ---
 
